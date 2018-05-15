@@ -12,6 +12,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText text_idcard;
     private Button btn_idcard;
 
+    private static final int PICK_CAMERA = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,16 +26,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(MainActivity.this, LivePreviewActivity.class);
-                MainActivity.this.startActivity(myIntent);
+                startActivityForResult(myIntent, PICK_CAMERA);
             }
         });
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        String id_card = getIntent().getStringExtra("ID_CARD");
-        text_idcard.setText(id_card);
+        if((resultCode == RESULT_OK) && (requestCode == PICK_CAMERA)){
+            if(data != null){
+                String aid = data.getStringExtra("ACC_ID");
+                text_idcard.setText(aid);
+            }
+        }
     }
+
 }

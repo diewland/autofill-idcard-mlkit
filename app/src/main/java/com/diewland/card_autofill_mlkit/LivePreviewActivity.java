@@ -64,7 +64,7 @@ public class LivePreviewActivity extends AppCompatActivity implements OnRequestP
         try {
             // TODO switch to detector that you want
             Log.i(TAG, "Using Text Detector Processor");
-            cameraSource.setMachineLearningFrameProcessor(new TextRecognitionProcessor(getApplicationContext()));
+            cameraSource.setMachineLearningFrameProcessor(new TextRecognitionProcessor(this));
         } catch (Exception e) {
             Log.e(TAG, "can not create camera source: " + model);
         }

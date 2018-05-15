@@ -13,6 +13,7 @@
 // limitations under the License.
 package com.diewland.card_autofill_mlkit;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -30,6 +31,8 @@ import com.google.firebase.ml.vision.text.FirebaseVisionTextDetector;
 
 import java.io.IOException;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 /** Processor for the text recognition demo. */
 public class TextRecognitionProcessor extends VisionProcessorBase<FirebaseVisionText> {
@@ -78,21 +81,22 @@ public class TextRecognitionProcessor extends VisionProcessorBase<FirebaseVision
           GraphicOverlay.Graphic textGraphic = new TextGraphic(graphicOverlay, elements.get(k));
           graphicOverlay.add(textGraphic);
           */
-
-          // TODO optimise logic
-          // TODO move to utility function
           String t_str = elements.get(k).getText();
           if(android.text.TextUtils.isDigitsOnly(t_str)){
               text_idcard += t_str;
-              if(text_idcard.length() == 13){
-                  Log.d(TAG, text_idcard);
-                  Intent intent = new Intent(previewCtx, MainActivity.class);
-                  intent.putExtra("ID_CARD", text_idcard);
-                  previewCtx.startActivity(intent);
-              }
           }
           else {
-              text_idcard = "";
+              if(text_idcard.length() == 13){ // detect Thai ID logic
+                  Log.d(TAG, text_idcard);
+                  Activity act = (Activity) previewCtx;
+                  Intent intent = new Intent();
+                  intent.putExtra("ACC_ID", text_idcard);
+                  act.setResult(RESULT_OK, intent);
+                  act.finish();
+              }
+              else {
+                  text_idcard = "";
+              }
           }
         }
       }
